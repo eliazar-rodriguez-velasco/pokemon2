@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class PokeHub {
   List<Pokemon> pokemon;
 
@@ -38,24 +40,26 @@ class Pokemon {
   List<double> multipliers;
   List<String> weaknesses;
   List<NextEvolution> nextEvolution;
+  List<PrevEvolution> prevEvolution;
 
   Pokemon(
       {this.id,
-        this.num,
-        this.name,
-        this.img,
-        this.type,
-        this.height,
-        this.weight,
-        this.candy,
-        this.candyCount,
-        this.egg,
-        this.spawnChance,
-        this.avgSpawns,
-        this.spawnTime,
-        this.multipliers,
-        this.weaknesses,
-        this.nextEvolution,});
+      this.num,
+      this.name,
+      this.img,
+      this.type,
+      this.height,
+      this.weight,
+      this.candy,
+      this.candyCount,
+      this.egg,
+      this.spawnChance,
+      this.avgSpawns,
+      this.spawnTime,
+      this.multipliers,
+      this.weaknesses,
+      this.nextEvolution,
+      this.prevEvolution});
 
   Pokemon.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -77,6 +81,12 @@ class Pokemon {
       nextEvolution = new List<NextEvolution>();
       json['next_evolution'].forEach((v) {
         nextEvolution.add(new NextEvolution.fromJson(v));
+      });
+    }
+    if (json['prev_evolution'] != null) {
+      prevEvolution = new List<PrevEvolution>();
+      json['prev_evolution'].forEach((v) {
+        prevEvolution.add(new PrevEvolution.fromJson(v));
       });
     }
   }
@@ -102,6 +112,29 @@ class Pokemon {
       data['next_evolution'] =
           this.nextEvolution.map((v) => v.toJson()).toList();
     }
+    if (this.prevEvolution != null) {
+      data['prev_evolution'] =
+          this.prevEvolution.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class PrevEvolution {
+  String num;
+  String name;
+
+  PrevEvolution({this.num, this.name});
+
+  PrevEvolution.fromJson(Map<String, dynamic> json) {
+    num = json['num'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['num'] = this.num;
+    data['name'] = this.name;
     return data;
   }
 }
